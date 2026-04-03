@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="script.js"></script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ZAPKART — Shop Everything</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#f0f2f8;color:#111;overflow-x:hidden;}
+.topstrip{background:linear-gradient(90deg,#ff416c,#ff4b2b,#f7971e,#ffd200,#21d190,#4facfe,#a18cd1);
+background-size:300% 100%;animation:stripShift 5s linear infinite;
+padding:.35rem 0;text-align:center;font-size:.78rem;font-weight:700;color:#fff;letter-spacing:2px;}
+@keyframes stripShift{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+nav{background:#fff;box-shadow:0 2px 20px rgba(0,0,0,.08);position:sticky;top:0;z-index:200;}
+.nav-inner{max-width:1400px;margin:0 auto;padding:.9rem 1.5rem;display:flex;align-items:center;gap:1.5rem;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:3px;
+background:linear-gradient(135deg,#ff416c,#a18cd1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;flex-shrink:0;}
+.search-bar{flex:1;display:flex;border-radius:50px;overflow:hidden;border:2.5px solid transparent;
+background:linear-gradient(#fff,#fff) padding-box,linear-gradient(90deg,#ff416c,#a18cd1,#4facfe) border-box;
+box-shadow:0 4px 15px rgba(255,65,108,.15);}
+.search-bar input{flex:1;padding:.65rem 1.4rem;border:none;outline:none;font-family:'Nunito',sans-serif;font-size:.95rem;background:transparent;}
+.search-bar button{padding:.65rem 1.6rem;background:linear-gradient(135deg,#ff416c,#a18cd1);border:none;color:#fff;font-weight:700;font-size:.9rem;cursor:pointer;}
+.nav-actions{display:flex;gap:.7rem;flex-shrink:0;}
+.nav-btn{padding:.55rem 1.3rem;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .25s;}
+.nav-btn.login{border:2px solid #ff416c;color:#ff416c;background:#fff;}
+.nav-btn.login:hover{background:#ff416c;color:#fff;}
+.nav-btn.cart{background:linear-gradient(135deg,#f7971e,#ffd200);border:none;color:#fff;display:flex;align-items:center;gap:.4rem;box-shadow:0 4px 15px rgba(247,151,30,.3);}
+.nav-btn.cart:hover{transform:translateY(-2px);}
+.cart-num{background:#fff;color:#f7971e;border-radius:50%;width:20px;height:20px;font-size:.7rem;display:flex;align-items:center;justify-content:center;font-weight:900;}
+.cat-nav{background:#fff;border-top:1px solid #f0f0f0;position:sticky;top:69px;z-index:190;}
+.cat-nav-inner{max-width:1400px;margin:0 auto;display:flex;gap:0;overflow-x:auto;scrollbar-width:none;}
+.cat-nav-inner::-webkit-scrollbar{display:none;}
+.cat-tab{padding:.75rem 1.6rem;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;color:#555;}
+.cat-tab:hover{color:#ff416c;border-bottom-color:#ff416c;}
+.cat-tab.active{color:#ff416c;border-bottom-color:#ff416c;}
+.hero{max-width:1400px;margin:1.2rem auto;padding:0 1.5rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;}
+.hero-main{grid-column:1/3;border-radius:20px;overflow:hidden;position:relative;height:340px;}
+.hero-slides{display:flex;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,0,.2,1);}
+.hero-slide{min-width:100%;height:100%;position:relative;display:flex;align-items:center;padding:2.5rem 3rem;}
+.slide1{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);}
+.slide2{background:linear-gradient(135deg,#11998e,#38ef7d);}
+.slide3{background:linear-gradient(135deg,#f7971e,#ffd200);}
+.slide4{background:linear-gradient(135deg,#fc5c7d,#6a3093);}
+.hero-slide-txt h2{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;letter-spacing:2px;color:#fff;line-height:1;margin-bottom:.6rem;}
+.hero-slide-txt p{color:rgba(255,255,255,.8);font-size:1rem;margin-bottom:1.2rem;}
+.hero-slide-txt .tag{display:inline-block;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);border-radius:50px;padding:.3rem 1rem;font-size:.75rem;font-weight:700;color:#fff;letter-spacing:1.5px;margin-bottom:.8rem;}
+.slide-emoji{position:absolute;right:2rem;font-size:8rem;opacity:.9;animation:floatImg 3s ease-in-out infinite;}
+@keyframes floatImg{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.slide-dots{position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);display:flex;gap:.5rem;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:all .3s;}
+.dot.active{background:#fff;width:24px;border-radius:4px;}
+.hero-side{display:flex;flex-direction:column;gap:1rem;}
+.hero-side-card{flex:1;border-radius:16px;overflow:hidden;position:relative;display:flex;align-items:center;padding:1.4rem;cursor:pointer;transition:transform .3s;}
+.hero-side-card:hover{transform:scale(1.03);}
+.sc1{background:linear-gradient(135deg,#ff9a9e,#fecfef);}
+.sc2{background:linear-gradient(135deg,#a1c4fd,#c2e9fb);}
+.hero-side-card h3{font-size:1.2rem;font-weight:800;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.2);}
+.hero-side-card p{font-size:.78rem;color:rgba(255,255,255,.85);}
+.sc-emoji{position:absolute;right:1rem;font-size:3.5rem;opacity:.85;}
+.main{max-width:1400px;margin:0 auto;padding:0 1.5rem;}
+.marquee-bar{background:linear-gradient(90deg,#0f0c29,#302b63);padding:.7rem 0;overflow:hidden;margin-top:1.5rem;border-radius:16px;}
+.marquee-inner{display:flex;white-space:nowrap;animation:mq 20s linear infinite;}
+.marquee-inner span{font-size:.8rem;font-weight:700;color:#fff;letter-spacing:2px;padding:0 2rem;}
+.marquee-inner .mdot{color:#ffd200;}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.gender-tabs{display:flex;gap:1rem;margin:2rem 0 1.5rem;flex-wrap:wrap;}
+.g-tab{padding:.7rem 2rem;border-radius:50px;font-weight:800;font-size:.95rem;cursor:pointer;border:2.5px solid transparent;transition:all .3s;background:#fff;color:#555;}
+.g-tab.men{border-color:#4facfe;}
+.g-tab.men.active,.g-tab.men:hover{background:linear-gradient(135deg,#4facfe,#00f2fe);color:#fff;box-shadow:0 6px 20px rgba(79,172,254,.35);}
+.g-tab.women{border-color:#ff416c;}
+.g-tab.women.active,.g-tab.women:hover{background:linear-gradient(135deg,#ff416c,#fc5c7d);color:#fff;box-shadow:0 6px 20px rgba(255,65,108,.35);}
+.g-tab.kids{border-color:#ffd200;}
+.g-tab.kids.active,.g-tab.kids:hover{background:linear-gradient(135deg,#f7971e,#ffd200);color:#fff;box-shadow:0 6px 20px rgba(255,210,0,.35);}
+.g-tab.all{border-color:#a18cd1;}
+.g-tab.all.active,.g-tab.all:hover{background:linear-gradient(135deg,#a18cd1,#fbc2eb);color:#fff;box-shadow:0 6px 20px rgba(161,140,209,.35);}
+.g-tab.uni{border-color:#21d190;}
+.g-tab.uni.active,.g-tab.uni:hover{background:linear-gradient(135deg,#21d190,#4facfe);color:#fff;box-shadow:0 6px 20px rgba(33,209,144,.35);}
+.cat-icons{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:1rem;margin-bottom:2rem;}
+.cat-icon-card{background:#fff;border-radius:20px;padding:1.2rem .8rem;text-align:center;cursor:pointer;transition:all .3s;box-shadow:0 4px 15px rgba(0,0,0,.06);}
+.cat-icon-card:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(0,0,0,.12);}
+.cat-icon-emoji{font-size:2.5rem;margin-bottom:.5rem;}
+.cat-icon-label{font-size:.78rem;font-weight:700;color:#444;}
+.deals-banner{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);border-radius:20px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative;}
+.deals-banner::before{content:'';position:absolute;top:-50%;right:-10%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,65,108,.2),transparent 70%);pointer-events:none;}
+.deals-title{color:#fff;}
+.deals-title h3{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:2px;}
+.deals-title p{color:rgba(255,255,255,.6);font-size:.9rem;}
+.timer{display:flex;gap:.7rem;}
+.timer-box{background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:.6rem 1rem;text-align:center;min-width:60px;}
+.timer-num{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#ffd200;line-height:1;}
+.timer-lbl{font-size:.65rem;color:rgba(255,255,255,.5);letter-spacing:1px;text-transform:uppercase;}
+.deals-badge{background:linear-gradient(135deg,#ff416c,#ff4b2b);border-radius:12px;padding:1rem 1.5rem;color:#fff;text-align:center;}
+.deals-badge p{font-size:.75rem;opacity:.8;}
+.deals-badge strong{display:block;font-size:2rem;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;}
+.trending-scroll{display:flex;gap:1rem;overflow-x:auto;padding-bottom:.8rem;margin-bottom:2rem;scrollbar-width:none;}
+.trending-scroll::-webkit-scrollbar{display:none;}
+.trend-chip{background:#fff;border-radius:50px;padding:.6rem 1.4rem;font-size:.82rem;font-weight:700;white-space:nowrap;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.07);transition:all .25s;display:flex;align-items:center;gap:.5rem;}
+.trend-chip:hover{transform:translateY(-3px);}
+.trend-chip.active{background:linear-gradient(135deg,#ff416c,#a18cd1);color:#fff;}
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;}
+.sec-header h2{font-size:1.5rem;font-weight:900;}
+.sec-header h2 span{background:linear-gradient(90deg,#ff416c,#a18cd1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.sec-header a{font-size:.85rem;font-weight:700;color:#ff416c;text-decoration:none;border:1.5px solid #ff416c;padding:.35rem 1rem;border-radius:50px;transition:all .2s;}
+.sec-header a:hover{background:#ff416c;color:#fff;}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;margin-bottom:3rem;}
+/* FLIP CARD */
+.flip-wrap{perspective:1000px;height:380px;}
+.flip-card{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,0,.2,1);}
+.flip-wrap:hover .flip-card{transform:rotateY(180deg);}
+.card-front,.card-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;overflow:hidden;}
+.card-front{background:#fff;box-shadow:0 6px 25px rgba(0,0,0,.08);}
+.cf-img{height:220px;position:relative;overflow:hidden;}
+.cf-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.cf-badge{position:absolute;top:10px;left:10px;padding:.25rem .75rem;border-radius:50px;font-size:.68rem;font-weight:800;letter-spacing:.5px;}
+.b-sale{background:linear-gradient(135deg,#ff416c,#ff4b2b);color:#fff;}
+.b-new{background:linear-gradient(135deg,#21d190,#4facfe);color:#fff;}
+.b-hot{background:linear-gradient(135deg,#f7971e,#ffd200);color:#fff;}
+.b-top{background:linear-gradient(135deg,#a18cd1,#fbc2eb);color:#fff;}
+.cf-fav{position:absolute;top:10px;right:10px;width:34px;height:34px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all .25s;border:none;}
+.cf-fav:hover,.cf-fav.liked{background:#ff416c;}
+.cf-body{padding:1rem;}
+.cf-brand{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#aaa;margin-bottom:.2rem;}
+.cf-name{font-weight:800;font-size:.95rem;color:#222;line-height:1.3;margin-bottom:.5rem;}
+.cf-row{display:flex;justify-content:space-between;align-items:center;}
+.cf-price{font-size:1.15rem;font-weight:900;color:#ff416c;}
+.cf-old{font-size:.8rem;text-decoration:line-through;color:#bbb;margin-left:.3rem;}
+.cf-off{font-size:.7rem;font-weight:800;color:#21d190;margin-left:.3rem;}
+.cf-stars{font-size:.75rem;color:#ffd200;}
+.cf-rcount{font-size:.7rem;color:#bbb;margin-left:3px;}
+.card-back{transform:rotateY(180deg);background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:1.5rem;text-align:center;color:#fff;gap:.8rem;}
+.back-emoji{font-size:3rem;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.back-name{font-weight:800;font-size:1.05rem;line-height:1.3;}
+.back-price{font-size:1.5rem;font-weight:900;background:linear-gradient(90deg,#ffd200,#ff416c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.back-desc{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.5;}
+.back-sizes{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;}
+.sz{padding:.25rem .65rem;border:1.5px solid rgba(255,255,255,.3);border-radius:8px;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .2s;color:#fff;}
+.sz:hover,.sz.selected{background:#ff416c;border-color:#ff416c;}
+.back-btns{display:flex;gap:.6rem;width:100%;}
+.btn-cb{flex:1;padding:.7rem;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .25s;border:none;}
+.btn-add{background:linear-gradient(135deg,#ff416c,#ff4b2b);color:#fff;}
+.btn-add:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(255,65,108,.4);}
+.btn-wish{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2)!important;border:none;color:#fff;}
+.btn-wish:hover{background:rgba(255,255,255,.2);}
+.offer-banners{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2.5rem;}
+.offer-card{border-radius:20px;padding:1.8rem;position:relative;overflow:hidden;cursor:pointer;transition:transform .3s;}
+.offer-card:hover{transform:translateY(-4px);}
+.oc1{background:linear-gradient(135deg,#667eea,#764ba2);}
+.oc2{background:linear-gradient(135deg,#f093fb,#f5576c);}
+.oc3{background:linear-gradient(135deg,#4facfe,#00f2fe);}
+.offer-card h3{color:#fff;font-size:1.3rem;font-weight:900;margin-bottom:.3rem;}
+.offer-card p{color:rgba(255,255,255,.8);font-size:.82rem;margin-bottom:1rem;}
+.off-tag{display:inline-block;background:rgba(255,255,255,.25);backdrop-filter:blur(10px);color:#fff;padding:.3rem .9rem;border-radius:50px;font-size:.75rem;font-weight:800;letter-spacing:1px;}
+.oc-emoji{position:absolute;right:1.2rem;bottom:.8rem;font-size:4rem;opacity:.7;}
+#cart-sidebar{position:fixed;top:0;right:-440px;width:420px;height:100vh;background:#fff;box-shadow:-10px 0 40px rgba(0,0,0,.15);z-index:400;transition:right .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+#cart-sidebar.open{right:0;}
+.cs-head{padding:1.5rem;background:linear-gradient(135deg,#ff416c,#a18cd1);display:flex;justify-content:space-between;align-items:center;}
+.cs-head h2{color:#fff;font-size:1.3rem;font-weight:800;}
+.cs-close{background:rgba(255,255,255,.2);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer;}
+.cs-items{flex:1;overflow-y:auto;padding:1rem;}
+.cs-empty{text-align:center;padding:4rem 1rem;color:#aaa;}
+.cs-empty-emoji{font-size:4rem;margin-bottom:1rem;}
+.cs-item{display:flex;gap:.8rem;align-items:center;padding:1rem 0;border-bottom:1px solid #f0f0f0;}
+.cs-item img{width:75px;height:75px;object-fit:cover;border-radius:12px;}
+.cs-item-info{flex:1;}
+.cs-item-info h4{font-size:.88rem;font-weight:700;margin-bottom:.2rem;}
+.cs-item-info p{font-size:.82rem;color:#ff416c;font-weight:700;}
+.cs-item-qty{display:flex;align-items:center;gap:.5rem;margin-top:.4rem;}
+.qty-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid #ddd;background:#fff;cursor:pointer;font-size:1rem;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.qty-btn:hover{background:#ff416c;border-color:#ff416c;color:#fff;}
+.qty-num{font-size:.88rem;font-weight:700;min-width:20px;text-align:center;}
+.cs-remove{background:none;border:none;color:#ddd;cursor:pointer;font-size:1.1rem;transition:color .2s;}
+.cs-remove:hover{color:#ff416c;}
+.cs-foot{padding:1.2rem 1.5rem;border-top:1px solid #f0f0f0;}
+.cs-total{display:flex;justify-content:space-between;margin-bottom:1rem;font-size:1.1rem;font-weight:800;}
+.cs-total span:last-child{color:#ff416c;}
+.checkout-btn{width:100%;padding:1rem;background:linear-gradient(135deg,#ff416c,#a18cd1);border:none;border-radius:15px;color:#fff;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .3s;}
+.checkout-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,65,108,.4);}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(3px);}
+#overlay.on{opacity:1;pointer-events:all;}
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(120px);background:linear-gradient(135deg,#21d190,#4facfe);color:#fff;padding:.8rem 2rem;border-radius:50px;font-weight:700;font-size:.9rem;z-index:500;transition:transform .4s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 30px rgba(33,209,144,.4);}
+#toast.show{transform:translateX(-50%) translateY(0);}
+footer{background:#1a1a2e;color:#fff;padding:3rem 1.5rem 2rem;margin-top:2rem;}
+.footer-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;margin-bottom:2rem;}
+.footer-col h4{font-size:1rem;font-weight:800;margin-bottom:1rem;background:linear-gradient(90deg,#ff416c,#ffd200);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.footer-col a{display:block;color:rgba(255,255,255,.55);text-decoration:none;font-size:.82rem;margin-bottom:.4rem;transition:color .2s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{text-align:center;color:rgba(255,255,255,.35);font-size:.78rem;border-top:1px solid rgba(255,255,255,.08);padding-top:1.5rem;max-width:1400px;margin:0 auto;}
+.sa{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease;}
+.sa.vis{opacity:1;transform:translateY(0);}
+@media(max-width:768px){
+.hero{grid-template-columns:1fr;}.hero-main{height:220px;}.hero-side{flex-direction:row;}
+.offer-banners{grid-template-columns:1fr;}.slide-emoji{font-size:4rem;opacity:.4;}
+.nav-actions .nav-btn.login{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="topstrip">🎉 MEGA SALE — UP TO 80% OFF | FREE DELIVERY ABOVE ₹499 | USE CODE: ZAP20 FOR EXTRA 20% OFF 🎉</div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">ZAPKART</div>
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Search for clothes, shoes, jewellery, electronics..." onkeyup="liveSearch(this.value)"/>
+      <button onclick="doSearch()">🔍 Search</button>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn login">👤 Login</button>
+      <button class="nav-btn cart" onclick="openCart()">🛒 Cart <span class="cart-num" id="cart-count">0</span></button>
+    </div>
+  </div>
+</nav>
+
+<nav class="cat-nav">
+  <div class="cat-nav-inner">
+    <div class="cat-tab active" onclick="setMainCat(this,'all')">🏠 Home</div>
+    <div class="cat-tab" onclick="setMainCat(this,'clothing')">👗 Clothing</div>
+    <div class="cat-tab" onclick="setMainCat(this,'shoes')">👟 Shoes</div>
+    <div class="cat-tab" onclick="setMainCat(this,'jewellery')">💍 Jewellery</div>
+    <div class="cat-tab" onclick="setMainCat(this,'electronics')">📱 Electronics</div>
+    <div class="cat-tab" onclick="setMainCat(this,'beauty')">💄 Beauty</div>
+    <div class="cat-tab" onclick="setMainCat(this,'sports')">🏋️ Sports</div>
+    <div class="cat-tab" onclick="setMainCat(this,'kids')">🎒 Kids</div>
+    <div class="cat-tab" onclick="setMainCat(this,'home')">🏡 Home &amp; Living</div>
+  </div>
+</nav>
+
+<div class="hero main" style="margin-top:1.5rem">
+  <div class="hero-main">
+    <div class="hero-slides" id="hero-slides">
+      <div class="hero-slide slide1">
+        <div class="hero-slide-txt">
+          <span class="tag">✨ NEW DROP 2025</span>
+          <h2>STREET DRIP<br>COLLECTION</h2>
+          <p>Bold fits for bold souls. Gen Z approved.</p>
+          <button class="nav-btn login" style="border-color:#abbe16;color:#fff;" onclick="scrollToProducts()">Shop Now →</button>
+        </div>
+        <div class="slide-emoji">👟</div>
+        <div class="slide-dots">
+          <div class="dot active" onclick="goSlide(0)"></div>
+          <div class="dot" onclick="goSlide(1)"></div>
+          <div class="dot" onclick="goSlide(2)"></div>
+          <div class="dot" onclick="goSlide(3)"></div>
+        </div>
+      </div>
+      <div class="hero-slide slide2">
+        <div class="hero-slide-txt">
+          <span class="tag">💍 TRENDING NOW</span>
+          <h2>JEWELLERY<br>GOALS</h2>
+          <p>Chunky chains, hoops &amp; more. Slay every day.</p>
+          <button class="nav-btn login" style="border-color:#fff;color:#fff;" onclick="scrollToProducts()">Explore →</button>
+        </div>
+        <div class="slide-emoji">💍</div>
+      </div>
+      <div class="hero-slide slide3">
+        <div class="hero-slide-txt">
+          <span class="tag">🔥 MEGA SALE</span>
+          <h2>UP TO 80%<br>OFF TODAY</h2>
+          <p>Don't sleep on these deals. Limited time only!</p>
+          <button class="nav-btn login" style="border-color:#333;color:#333;" onclick="scrollToProducts()">Grab Deals →</button>
+        </div>
+        <div class="slide-emoji">🛍️</div>
+      </div>
+      <div class="hero-slide slide4">
+        <div class="hero-slide-txt">
+          <span class="tag">👗 WOMEN'S EDIT</span>
+          <h2>KURTAS &amp;<br>CO-ORDS</h2>
+          <p>Festive season fits that hit different.</p>
+          <button class="nav-btn login" style="border-color:#fff;color:#fff;" onclick="scrollToProducts()">View Edit →</button>
+        </div>
+        <div class="slide-emoji">👗</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-side">
+    <div class="hero-side-card sc1" onclick="filterGender('women',null)">
+      <div><h3>Women's</h3><p>New arrivals 🌸</p></div>
+      <div class="sc-emoji">👩</div>
+    </div>
+    <div class="hero-side-card sc2" onclick="filterGender('kids',null)">
+      <div><h3>Kids Zone</h3><p>Cute &amp; fun picks 🎈</p></div>
+      <div class="sc-emoji">🧒</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="marquee-bar sa">
+    <div class="marquee-inner">
+      <span>FREE DELIVERY</span><span class="mdot">⭐</span>
+      <span>10 LAKH+ HAPPY CUSTOMERS</span><span class="mdot">⭐</span>
+      <span>EASY RETURNS</span><span class="mdot">⭐</span>
+      <span>SECURE PAYMENTS</span><span class="mdot">⭐</span>
+      <span>AUTHENTIC PRODUCTS</span><span class="mdot">⭐</span>
+      <span>24/7 SUPPORT</span><span class="mdot">⭐</span>
+      <span>FREE DELIVERY</span><span class="mdot">⭐</span>
+      <span>10 LAKH+ HAPPY CUSTOMERS</span><span class="mdot">⭐</span>
+      <span>EASY RETURNS</span><span class="mdot">⭐</span>
+      <span>SECURE PAYMENTS</span><span class="mdot">⭐</span>
+      <span>AUTHENTIC PRODUCTS</span><span class="mdot">⭐</span>
+      <span>24/7 SUPPORT</span><span class="mdot">⭐</span>
+    </div>
+  </div>
+
+  <div class="gender-tabs sa">
+    <div class="g-tab all active" onclick="filterGender('all',this)">🌈 All</div>
+    <div class="g-tab men" onclick="filterGender('men',this)">👨 Men</div>
+    <div class="g-tab women" onclick="filterGender('women',this)">👩 Women</div>
+    <div class="g-tab kids" onclick="filterGender('kids',this)">🧒 Kids</div>
+    
+  </div>
+
+  <div class="cat-icons sa">
+    <div class="cat-icon-card" onclick="filterCat('clothing')"><div class="cat-icon-emoji">👗</div><div class="cat-icon-label">Clothing</div></div>
+    <div class="cat-icon-card" onclick="filterCat('shoes')"><div class="cat-icon-emoji">👟</div><div class="cat-icon-label">Shoes</div></div>
+    <div class="cat-icon-card" onclick="filterCat('jewellery')"><div class="cat-icon-emoji">💍</div><div class="cat-icon-label">Jewellery</div></div>
+    <div class="cat-icon-card" onclick="filterCat('electronics')"><div class="cat-icon-emoji">📱</div><div class="cat-icon-label">Electronics</div></div>
+    <div class="cat-icon-card" onclick="filterCat('beauty')"><div class="cat-icon-emoji">💄</div><div class="cat-icon-label">Beauty</div></div>
+    <div class="cat-icon-card" onclick="filterCat('sports')"><div class="cat-icon-emoji">🏋️</div><div class="cat-icon-label">Sports</div></div>
+    <div class="cat-icon-card" onclick="filterCat('bags')"><div class="cat-icon-emoji">👜</div><div class="cat-icon-label">Bags</div></div>
+    <div class="cat-icon-card" onclick="filterCat('watches')"><div class="cat-icon-emoji">⌚</div><div class="cat-icon-label">Watches</div></div>
+    <div class="cat-icon-card" onclick="filterCat('sunglasses')"><div class="cat-icon-emoji">🕶️</div><div class="cat-icon-label">Eyewear</div></div>
+    <div class="cat-icon-card" onclick="filterCat('fragrances')"><div class="cat-icon-emoji">🌸</div><div class="cat-icon-label">Fragrance</div></div>
+    <div class="cat-icon-card" onclick="filterCat('toys')"><div class="cat-icon-emoji">🧸</div><div class="cat-icon-label">Toys</div></div>
+    <div class="cat-icon-card" onclick="filterCat('home')"><div class="cat-icon-emoji">🏡</div><div class="cat-icon-label">Home</div></div>
+  </div>
+
+  <div class="deals-banner sa">
+    <div class="deals-title">
+      <h3>⚡ DEALS OF THE DAY</h3>
+      <p>Hurry up! Offers ending soon</p>
+    </div>
+    <div class="timer">
+      <div class="timer-box"><div class="timer-num" id="th">05</div><div class="timer-lbl">Hrs</div></div>
+      <div class="timer-box"><div class="timer-num" id="tm">30</div><div class="timer-lbl">Min</div></div>
+      <div class="timer-box"><div class="timer-num" id="ts">00</div><div class="timer-lbl">Sec</div></div>
+    </div>
+    <div class="deals-badge"><p>FLAT OFF</p><strong>80%</strong></div>
+  </div>
+
+  <div class="trending-scroll sa">
+    <div class="trend-chip active" onclick="setTrend(this)">🔥 All Trending</div>
+    <div class="trend-chip" onclick="setTrend(this)">👕 Oversized Tees</div>
+    <div class="trend-chip" onclick="setTrend(this)">👟 Chunky Sneakers</div>
+    <div class="trend-chip" onclick="setTrend(this)">👗 Co-ord Sets</div>
+    <div class="trend-chip" onclick="setTrend(this)">💍 Chain Jewellery</div>
+    <div class="trend-chip" onclick="setTrend(this)">👖 Cargo Pants</div>
+    <div class="trend-chip" onclick="setTrend(this)">🧢 Bucket Hats</div>
+    <div class="trend-chip" onclick="setTrend(this)">✨ Y2K Vibes</div>
+  </div>
+
+  <div id="products-section">
+    <div class="sec-header sa">
+      <h2>🔥 <span>Trending</span> Right Now</h2>
+      <a href="#">See All →</a>
+    </div>
+    <div class="products-grid sa" id="products-grid"></div>
+
+    <div class="offer-banners sa">
+      <div class="offer-card oc1" onclick="filterGender('men',null)">
+        <h3>Men's Mega Sale</h3>
+        <p>Shirts, Jeans, Shoes &amp; more</p>
+        <span class="off-tag">UP TO 70% OFF</span>
+        <div class="oc-emoji">👔</div>
+      </div>
+      <div class="offer-card oc2" onclick="filterGender('women',null)">
+        <h3>Women's Edit</h3>
+        <p>Kurtas, Dresses, Jewellery</p>
+        <span class="off-tag">UP TO 75% OFF</span>
+        <div class="oc-emoji">👗</div>
+      </div>
+      <div class="offer-card oc3" onclick="filterGender('kids',null)">
+        <h3>Kids' Zone</h3>
+        <p>Clothes, Shoes, Toys &amp; more</p>
+        <span class="off-tag">UP TO 60% OFF</span>
+        <div class="oc-emoji">🎒</div>
+      </div>
+    </div>
+
+    <div class="sec-header sa">
+      <h2>💍 <span>Jewellery</span> Collection</h2>
+      <a href="#">See All →</a>
+    </div>
+    <div class="products-grid sa" id="jewellery-grid"></div>
+
+    <div class="sec-header sa">
+      <h2>👟 <span>Shoes</span> You'll Love</h2>
+      <a href="#">See All →</a>
+    </div>
+    <div class="products-grid sa" id="shoes-grid"></div>
+
+    <div class="sec-header sa">
+      <h2>📱 <span>Electronics</span> &amp; Gadgets</h2>
+      <a href="#">See All →</a>
+    </div>
+    <div class="products-grid sa" id="elec-grid"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>ZAPKART</h4>
+      <a href="#">About Us</a><a href="#">Careers</a><a href="#">Press</a><a href="#">Blog</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <a href="#">Track Order</a><a href="#">Returns</a><a href="#">Refund Policy</a><a href="#">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h4>Categories</h4>
+      <a href="#">Men's Fashion</a><a href="#">Women's Fashion</a><a href="#">Kids' Fashion</a><a href="#">Jewellery</a>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <a href="#">📷 Instagram</a><a href="#">🎵 TikTok</a><a href="#">▶️ YouTube</a><a href="#">🐦 Twitter</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 ZAPKART · Made with 💜 for the Gen Z generation</div>
+</footer>
+
+<div id="overlay" onclick="closeCart()"></div>
+<div id="cart-sidebar">
+  <div class="cs-head">
+    <h2>🛒 My Cart</h2>
+    <button class="cs-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cs-items" id="cart-items-container">
+    <div class="cs-empty"><div class="cs-empty-emoji">🛒</div><p style="font-weight:700;font-size:1rem;margin-bottom:.5rem">Your cart is empty!</p><p style="font-size:.85rem">Add items to get started 🔥</p></div>
+  </div>
+  <div id="cart-footer" style="display:none" class="cs-foot">
+    <div class="cs-total"><span>Total Amount</span><span id="cart-total">₹0</span></div>
+    <button class="checkout-btn">Proceed to Checkout 🚀</button>
+  </div>
+</div>
+<div id="toast">✅ Added!</div>
+
+<script>
+const PRODUCTS=[
+{id:1,name:"Oversized Graphic Tee",brand:"STREETCORE",price:699,old:1499,img:"https://www.trendyverse.co.in/cdn/shop/files/salty5.png?v=1772189803&width=3840",badge:"hot",cat:"clothing",gender:"men",emoji:"👕",desc:"100% Cotton. Dropped shoulders. Bold Y2K graphic print.",sizes:["S","M","L","XL","XXL"],rating:4.8,rv:2341},
+{id:2,name:"Oversized Graphic Tee",brand:"STREETCORE",price:699,old:1499,img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",badge:"hot",cat:"clothing",gender:"men",emoji:"👕",desc:"100% Cotton. Dropped shoulders. Bold Y2K graphic print.",sizes:["S","M","L","XL","XXL"],rating:4.8,rv:2341},
+{id:3,name:"Floral Wrap Dress",brand:"BLOSSOMCO",price:1299,old:2499,img:"https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&h=400&fit=crop",badge:"new",cat:"clothing",gender:"women",emoji:"👗",desc:"Flowy chiffon fabric. Perfect for day or night.",sizes:["XS","S","M","L"],rating:4.9,rv:1892},
+{id:4,name:"Cargo Wide-Leg Pants",brand:"URBANFIT",price:1799,old:3499,img:"https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&h=400&fit=crop",badge:"hot",cat:"clothing",gender:"men",emoji:"👖",desc:"6 pockets. Relaxed fit. Total street-ready vibe.",sizes:["28","30","32","34","36"],rating:4.7,rv:987},
+{id:5,name:"Kids Rainbow Hoodie",brand:"KIDSZAP",price:799,old:1299,img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=400&fit=crop",badge:"new",cat:"clothing",gender:"kids",emoji:"🌈",desc:"Soft fleece. Bright rainbow print. Machine washable.",sizes:["3-4Y","5-6Y","7-8Y","9-10Y"],rating:4.9,rv:654},
+{id:6,name:"Satin Slip Co-Ord Set",brand:"GLOWFIT",price:2199,old:3999,img:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=400&fit=crop",badge:"sale",cat:"clothing",gender:"women",emoji:"✨",desc:"Satin finish. Crop top + wide pants. Utter vibe.",sizes:["XS","S","M","L"],rating:4.6,rv:432},
+{id:7,name:"Classic Denim Jacket",brand:"DENIM CULT",price:2499,old:null,img:"https://images.unsplash.com/photo-1543076447-215ad9ba6923?w=400&h=400&fit=crop",badge:"top",cat:"clothing",gender:"unisex",emoji:"🧥",desc:"Distressed wash. Unisex fit. An all-time classic.",sizes:["S","M","L","XL"],rating:4.8,rv:3201},
+{id:8,name:"Chunky Platform Sneakers",brand:"STRIDE CO.",price:3499,old:5999,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",badge:"hot",cat:"shoes",gender:"unisex",emoji:"👟",desc:"4cm platform. Cloud cushion sole. Iconic colourway.",sizes:["36","37","38","39","40","41","42"],rating:4.9,rv:5678},
+{id:9,name:"Women's Block Heels",brand:"STILETTO",price:1899,old:3299,img:"https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&h=400&fit=crop",badge:"new",cat:"shoes",gender:"women",emoji:"👠",desc:"Comfortable 5cm block heel. Faux suede upper.",sizes:["35","36","37","38","39","40"],rating:4.5,rv:789},
+{id:10,name:"Kids Light-Up Sneakers",brand:"KIDSTEP",price:999,old:1799,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",badge:"new",cat:"shoes",gender:"kids",emoji:"✨",desc:"LED sole. Easy velcro strap. Kids absolutely love them!",sizes:["C8","C9","C10","C11","C12","C13"],rating:5.0,rv:2134},
+{id:11,name:"Men's Premium Loafers",brand:"DAPPERCO",price:2299,old:4499,img:"https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=400&h=400&fit=crop",badge:"sale",cat:"shoes",gender:"men",emoji:"🥿",desc:"Premium faux leather. Slip-on comfort daily wear.",sizes:["39","40","41","42","43","44"],rating:4.6,rv:456},
+{id:12,name:"Chunky Gold Chain",brand:"METALHEAD",price:599,old:null,img:"https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=400&fit=crop",badge:"hot",cat:"jewellery",gender:"unisex",emoji:"🔗",desc:"18K gold plated. Thick Cuban link. Major drip alert.",sizes:["One Size"],rating:4.8,rv:3412},
+{id:13,name:"Pearl Drop Earrings",brand:"SOFTGIRL",price:399,old:799,img:"https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop",badge:"new",cat:"jewellery",gender:"women",emoji:"🤍",desc:"Freshwater pearl drop. Delicate gold tone hook.",sizes:["One Size"],rating:4.9,rv:2876},
+{id:14,name:"Crystal Stacking Rings Set",brand:"GLOW CO.",price:299,old:599,img:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop",badge:"sale",cat:"jewellery",gender:"women",emoji:"💍",desc:"Set of 5 adjustable rings. Mix & match crystals.",sizes:["Adjustable"],rating:4.7,rv:1654},
+{id:15,name:"Kids Charm Bracelet",brand:"KIDSZAP",price:249,old:499,img:"https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=400&fit=crop",badge:"new",cat:"jewellery",gender:"kids",emoji:"🌟",desc:"Colourful charms. Hypoallergenic silver. Super cute!",sizes:["One Size"],rating:4.8,rv:543},
+{id:16,name:"Neon Bluetooth Earbuds",brand:"SOUNDZAP",price:1299,old:2999,img:"https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400&h=400&fit=crop",badge:"hot",cat:"electronics",gender:"unisex",emoji:"🎧",desc:"30hr battery. Active noise cancel. Gen Z colourway.",sizes:["One Size"],rating:4.7,rv:4321},
+{id:17,name:"Smart Watch Neon Edition",brand:"TECHZAP",price:2999,old:5999,img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop",badge:"new",cat:"electronics",gender:"unisex",emoji:"⌚",desc:"Health tracking. 100+ watch faces. Waterproof IP68.",sizes:["One Size"],rating:4.6,rv:2109},
+{id:18,name:"Luxury Perfume Gift Set",brand:"ESSENCE",price:1799,old:2999,img:"https://images.unsplash.com/photo-1541643600914-78b084683702?w=400&h=400&fit=crop",badge:"top",cat:"beauty",gender:"unisex",emoji:"🌸",desc:"3 full-size fragrances. Long lasting 24hr scent.",sizes:["One Size"],rating:4.9,rv:1234},
+{id:19,name:"Pro Makeup Palette",brand:"GLOWUP",price:899,old:1599,img:"https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400&h=400&fit=crop",badge:"sale",cat:"beauty",gender:"women",emoji:"💄",desc:"18 shades. Matte & shimmer. Vegan & cruelty-free.",sizes:["One Size"],rating:4.8,rv:3456},
+{id:20,name:"Classic Denim Jacket",brand:"DENIM CULT",price:2499,old:null,img:"https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400&h=400&fit=crop",badge:"top",cat:"clothing",gender:"unisex",emoji:"🧥",desc:"Distressed wash. Unisex fit. An all-time classic.",sizes:["S","M","L","XL"],rating:4.8,rv:3201},
+{id:21,name:"Classic Denim Jacket",brand:"DENIM CULT",price:2499,old:null,img:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=400&fit=crop",badge:"top",cat:"clothing",gender:"unisex",emoji:"🧥",desc:"Distressed wash. Unisex fit. An all-time classic.",sizes:["S","M","L","XL"],rating:4.8,rv:3201},
+{id:22,name:"Classic Denim Jacket",brand:"DENIM CULT",price:2499,old:null,img:"https://images.unsplash.com/photo-1520975922203-b8c3d63d6e5c?w=400&h=400&fit=crop",badge:"top",cat:"clothing",gender:"unisex",emoji:"🧥",desc:"Distressed wash. Unisex fit. An all-time classic.",sizes:["S","M","L","XL"],rating:4.8,rv:3201},
+{id:23,name:"Pearl Drop Earrings",brand:"SOFTGIRL",price:399,old:799,img:"https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop",badge:"new",cat:"jewellery",gender:"women",emoji:"🤍",desc:"Freshwater pearl drop. Delicate gold tone hook.",sizes:["One Size"],rating:4.9,rv:2876},
+{id:24,name:"Crystal Stacking Rings Set",brand:"GLOW CO.",price:299,old:599,img:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop",badge:"sale",cat:"jewellery",gender:"women",emoji:"💍",desc:"Set of 5 adjustable rings. Mix & match crystals.",sizes:["Adjustable"],rating:4.7,rv:1654},
+{id:25,name:"Pearl Drop Earrings",brand:"SOFTGIRL",price:399,old:799,img:"https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop",badge:"new",cat:"jewellery",gender:"women",emoji:"🤍",desc:"Freshwater pearl drop. Delicate gold tone hook.",sizes:["One Size"],rating:4.9,rv:2876},
+{id:26,name:"Crystal Stacking Rings Set",brand:"GLOW CO.",price:299,old:599,img:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop",badge:"sale",cat:"jewellery",gender:"women",emoji:"💍",desc:"Set of 5 adjustable rings. Mix & match crystals.",sizes:["Adjustable"],rating:4.7,rv:1654},
+{id:27,name:"Pearl Drop Earrings",brand:"SOFTGIRL",price:399,old:799,img:"https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop",badge:"new",cat:"jewellery",gender:"women",emoji:"🤍",desc:"Freshwater pearl drop. Delicate gold tone hook.",sizes:["One Size"],rating:4.9,rv:2876},
+{id:28,name:"Crystal Stacking Rings Set",brand:"GLOW CO.",price:299,old:599,img:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop",badge:"sale",cat:"jewellery",gender:"women",emoji:"💍",desc:"Set of 5 adjustable rings. Mix & match crystals.",sizes:["Adjustable"],rating:4.7,rv:1654},
+{id:29,name:"Pearl Drop Earrings",brand:"SOFTGIRL",price:399,old:799,img:"https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop",badge:"new",cat:"jewellery",gender:"women",emoji:"🤍",desc:"Freshwater pearl drop. Delicate gold tone hook.",sizes:["One Size"],rating:4.9,rv:2876},
+{id:30,name:"Crystal Stacking Rings Set",brand:"GLOW CO.",price:299,old:599,img:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop",badge:"sale",cat:"jewellery",gender:"women",emoji:"💍",desc:"Set of 5 adjustable rings. Mix & match crystals.",sizes:["Adjustable"],rating:4.7,rv:1654},
+{id:31,name:"Pearl Drop Earrings",brand:"SOFTGIRL",price:399,old:799,img:"https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop",badge:"new",cat:"jewellery",gender:"women",emoji:"🤍",desc:"Freshwater pearl drop. Delicate gold tone hook.",sizes:["One Size"],rating:4.9,rv:2876},
+{id:32,name:"Crystal Stacking Rings Set",brand:"GLOW CO.",price:299,old:599,img:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop",badge:"sale",cat:"jewellery",gender:"women",emoji:"💍",desc:"Set of 5 adjustable rings. Mix & match crystals.",sizes:["Adjustable"],rating:4.7,rv:1654},
+
+];
+
+let cart=[];
+let cGender='all';
+let cCat='all';
+let cSlide=0;
+
+function makeCard(p){
+  const off=p.old?Math.round((1-p.price/p.old)*100):0;
+  const stars='★'.repeat(Math.round(p.rating))+'☆'.repeat(5-Math.round(p.rating));
+  const szHtml=p.sizes.slice(0,5).map(s=>`<span class="sz" onclick="selSz(this)">${s}</span>`).join('');
+  return `<div class="flip-wrap sa">
+  <div class="flip-card">
+    <div class="card-front">
+      <div class="cf-img">
+        <img src="${p.img}" alt="${p.name}" loading="lazy"/>
+        <span class="cf-badge b-${p.badge}">${p.badge==='hot'?'🔥 HOT':p.badge==='new'?'✨ NEW':p.badge==='sale'?'🏷️ SALE':'⭐ TOP'}</span>
+        <button class="cf-fav" onclick="toggleFav(this)">♡</button>
+      </div>
+      <div class="cf-body">
+        <div class="cf-brand">${p.brand}</div>
+        <div class="cf-name">${p.name}</div>
+        <div class="cf-row">
+          <div><span class="cf-price">₹${p.price.toLocaleString('en-IN')}</span>${p.old?`<span class="cf-old">₹${p.old.toLocaleString('en-IN')}</span><span class="cf-off">${off}% off</span>`:''}</div>
+          <div><span class="cf-stars">${stars}</span><span class="cf-rcount">(${p.rv.toLocaleString('en-IN')})</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-back">
+      <div class="back-emoji">${p.emoji}</div>
+      <div class="back-name">${p.name}</div>
+      <div class="back-price">₹${p.price.toLocaleString('en-IN')}</div>
+      <div class="back-desc">${p.desc}</div>
+      <div class="back-sizes">${szHtml}</div>
+      <div class="back-btns">
+        <button class="btn-cb btn-add" onclick="addToCart(${p.id},event)">🛒 Add to Cart</button>
+        <button class="btn-cb btn-wish" onclick="addWish(event)">♡ Wish</button>
+      </div>
+    </div>
+  </div>
+</div>`;
+}
+
+function renderGrid(id,data){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.innerHTML=data.length?data.map(makeCard).join(''):'<p style="color:#aaa;padding:2rem;grid-column:1/-1">No products found.</p>';
+  observeSA();
+}
+
+function renderAll(){
+  let data=PRODUCTS;
+  if(cGender!=='all') data=data.filter(p=>p.gender===cGender||p.gender==='unisex');
+  if(cCat!=='all') data=data.filter(p=>p.cat===cCat);
+  renderGrid('products-grid',data.slice(0,8));
+  renderGrid('jewellery-grid',PRODUCTS.filter(p=>p.cat==='jewellery').slice(0,4));
+  renderGrid('shoes-grid',PRODUCTS.filter(p=>p.cat==='shoes').slice(0,4));
+  renderGrid('elec-grid',PRODUCTS.filter(p=>p.cat==='electronics').slice(0,4));
+}
+
+function filterGender(g,el){
+  cGender=g;
+  document.querySelectorAll('.g-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderAll();scrollToProducts();
+}
+function filterCat(c){cCat=c;cGender='all';renderAll();scrollToProducts();}
+function setMainCat(el,c){
+  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');cCat=c;renderAll();if(c!=='all')scrollToProducts();
+}
+function setTrend(el){
+  document.querySelectorAll('.trend-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+function scrollToProducts(){document.getElementById('products-section').scrollIntoView({behavior:'smooth'});}
+function liveSearch(q){
+  if(!q){renderAll();return;}
+  const r=PRODUCTS.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())||p.brand.toLowerCase().includes(q.toLowerCase())||p.cat.toLowerCase().includes(q.toLowerCase()));
+  renderGrid('products-grid',r);scrollToProducts();
+}
+function doSearch(){liveSearch(document.getElementById('search-input').value);}
+
+function addToCart(id,e){
+  if(e)e.stopPropagation();
+  const p=PRODUCTS.find(x=>x.id===id);
+  const ex=cart.find(x=>x.id===id);
+  if(ex)ex.qty++;else cart.push({...p,qty:1});
+  updateCart();showToast('✅ '+p.name+' added!');openCart();
+}
+function removeFromCart(id){cart=cart.filter(x=>x.id!==id);updateCart();}
+function changeQty(id,d){
+  const item=cart.find(x=>x.id===id);
+  if(!item)return;item.qty+=d;
+  if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
+  updateCart();
+}
+function updateCart(){
+  document.getElementById('cart-count').textContent=cart.reduce((s,x)=>s+x.qty,0);
+  const con=document.getElementById('cart-items-container');
+  const foot=document.getElementById('cart-footer');
+  if(!cart.length){
+    con.innerHTML='<div class="cs-empty"><div class="cs-empty-emoji">🛒</div><p style="font-weight:700;font-size:1rem;margin-bottom:.5rem">Your cart is empty!</p><p style="font-size:.85rem">Add items to get started 🔥</p></div>';
+    foot.style.display='none';return;
+  }
+  con.innerHTML=cart.map(i=>`<div class="cs-item"><img src="${i.img}" alt="${i.name}"/><div class="cs-item-info"><h4>${i.name}</h4><p>₹${i.price.toLocaleString('en-IN')}</p><div class="cs-item-qty"><button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button><span class="qty-num">${i.qty}</span><button class="qty-btn" onclick="changeQty(${i.id},1)">+</button></div></div><button class="cs-remove" onclick="removeFromCart(${i.id})">✕</button></div>`).join('');
+  const total=cart.reduce((s,x)=>s+x.price*x.qty,0);
+  document.getElementById('cart-total').textContent='₹'+total.toLocaleString('en-IN');
+  foot.style.display='block';
+}
+function openCart(){document.getElementById('cart-sidebar').classList.add('open');document.getElementById('overlay').classList.add('on');}
+function closeCart(){document.getElementById('cart-sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('on');}
+function toggleFav(el){el.classList.toggle('liked');el.textContent=el.classList.contains('liked')?'♥':'♡';if(el.classList.contains('liked'))showToast('💖 Added to Wishlist!');}
+function addWish(e){if(e)e.stopPropagation();showToast('💖 Added to Wishlist!');}
+function selSz(el){el.closest('.back-sizes').querySelectorAll('.sz').forEach(s=>s.classList.remove('selected'));el.classList.add('selected');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+function goSlide(n){
+  cSlide=n;
+  document.getElementById('hero-slides').style.transform=`translateX(-${n*100}%)`;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===n));
+}
+setInterval(()=>goSlide((cSlide+1)%4),4000);
+let secs=5*3600+30*60;
+setInterval(()=>{
+  secs--;if(secs<0)secs=5*3600;
+  const h=Math.floor(secs/3600),m=Math.floor((secs%3600)/60),s=secs%60;
+  document.getElementById('th').textContent=String(h).padStart(2,'0');
+  document.getElementById('tm').textContent=String(m).padStart(2,'0');
+  document.getElementById('ts').textContent=String(s).padStart(2,'0');
+},1000);
+function observeSA(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});
+  },{threshold:.08});
+  document.querySelectorAll('.sa').forEach(el=>{if(!el.classList.contains('vis'))obs.observe(el);});
+}
+renderAll();observeSA();
+</script>
+</body>
+</html>
